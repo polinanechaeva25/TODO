@@ -29,7 +29,7 @@ class Command(BaseCommand):
         #Создание тестовых пользователей
         for i in range(count_of_users):
             User.objects.create(user_name=f'User{i}', first_name=f'user{i}',
-                                last_name=f'user-user-{i}', birthday_year=f'{i}тзч',
+                                last_name=f'user-user-{i}', birthday_year=f'{i}',
                                 email=f'user{i}@user{i}.com')
 
         self.stdout.write(f'Successfully created {count_of_users} users!')
