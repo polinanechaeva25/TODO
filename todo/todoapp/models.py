@@ -8,6 +8,9 @@ class Project(models.Model):
     project_name = models.CharField(verbose_name='название', max_length=64)
     project_repo = models.URLField(verbose_name='репозиторий', max_length=512)
 
+    def __str__(self):
+        return self.project_name
+
 
 class TODO(models.Model):
     project = models.OneToOneField(Project, on_delete=models.CASCADE)
@@ -17,3 +20,6 @@ class TODO(models.Model):
     is_active = models.BooleanField(verbose_name='статус', db_index=True, default=True)
     created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='обновлен', auto_now=True)
+
+    def __str__(self):
+        return self.text
