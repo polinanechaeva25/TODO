@@ -10,10 +10,7 @@ class ProjectFilter(filters.FilterSet):
         fields = ['project_name']
 
 
-
-#
 class TODOFilter(filters.FilterSet):
-
     class Meta:
         model = TODO
         fields = {
