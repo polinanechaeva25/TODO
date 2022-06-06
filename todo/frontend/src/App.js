@@ -54,7 +54,7 @@ class App extends React.Component {
 
         axios.get('http://127.0.0.1:8000/api/project')
             .then(response => {
-//                console.log(response.data.results)
+//                console.log(response.data.results.id)
                 const projects = response.data.results
                 this.setState(
                     {
@@ -115,8 +115,8 @@ class App extends React.Component {
                         </nav>
                         <Switch>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
-                        <Route exact path='/todo' component={() => <NoticeList notices={this.state.notices}/>} />
-                        <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects}/>} />
+                        <Route exact path='/todo/' component={() => <NoticeList notices={this.state.notices}/>} />
+                        <Route exact path='/projects/' component={() => <ProjectList projects={this.state.projects}/>} />
                         <Route component={NotFound404} />
                         <Redirect from='/users' to='/' />
                         </Switch>
