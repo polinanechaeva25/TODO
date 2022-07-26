@@ -9,6 +9,8 @@ class User(models.Model):
     last_name = models.CharField(max_length=64)
     birthday_year = models.PositiveIntegerField()
     email = models.CharField(max_length=256, unique=True)
+    is_superuser = models.BooleanField(verbose_name='права администратора', db_index=True, default=False)
+    is_staff = models.BooleanField(verbose_name='права просмотра сайта администратора', db_index=True, default=False)
 
 
 
