@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'rest_framework.authtoken',
+    'drf_yasg',
 
     'mainapp',
     'todoapp',
@@ -131,7 +132,7 @@ CORS_ALLOWED_ORIGINS = [
 
 REST_FRAMEWORK = {
 
-#FROM snake_case TO camelCase
+    # FROM snake_case TO camelCase
     'DEFAULT_RENDERER_CLASSES': (
         # 'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
         # 'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
@@ -153,8 +154,22 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+# VERSIONING
 
-#Пагинация
+    # UrlPathVersioning
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
+
+    # NamespaceVersioning
+    #     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+
+    # QueryParameterVersioning
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
+
+    # AcceptHeaderVersioning - works
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+
+# PAGINATION
+
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 100
 }
