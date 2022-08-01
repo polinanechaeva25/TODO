@@ -4,7 +4,7 @@ from mainapp.serializers import UserModelSerializer
 from .models import Project, TODO
 
 
-class ProjectModelSerializer(HyperlinkedModelSerializer):
+class ProjectModelSerializer(ModelSerializer):
     users = UserModelSerializer(many=True)
 
     class Meta:
@@ -18,7 +18,7 @@ class ProjectModelSerializerBase(ModelSerializer):
         fields = '__all__'
 
 
-class TODOModelSerializer(HyperlinkedModelSerializer):
+class TODOModelSerializer(ModelSerializer):
     project = PrimaryKeyRelatedField(read_only=True)
     creator = UserModelSerializer()
 

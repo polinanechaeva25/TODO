@@ -7,6 +7,8 @@ import UserList from './components/Users.js'
 import Footer from './components/Footer.js'
 import NoticeList from './components/Notices.js'
 import ProjectList from './components/Projects.js'
+import ProjectForm from './components/ProjectForm.js'
+import NoticeForm from './components/NoticeForm.js'
 import axios from 'axios'
 import {BrowserRouter, Route, Link, Switch, Redirect} from 'react-router-dom'
 import LoginForm from './components/Auth.js'
@@ -26,7 +28,6 @@ class App extends React.Component {
         super(props)
         this.state = {
             'users': [],
-//            'menu': [],
             'footer': [],
             'projects': [],
             'notices': [],
@@ -93,25 +94,57 @@ class App extends React.Component {
         }).catch(error => {
         console.log(error)
         this.setState({projects: []})
+
         })
     }
 
+    deleteProject(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/project/${id}`, {headers})
+        .then(response => {
+        this.setState({projects: this.state.projects.filter((project)=>project.id !==
+        id)})
+        }).catch(error => console.log(error))
+    }
+
+    createProject(users, project_name, project_repo) {
+        const headers = this.get_headers()
+        const data = {users: [users], project_name: project_name, project_repo: project_repo}
+        axios.post(`http://127.0.0.1:8000/api/project/`, data, {headers})
+            .then(response => {
+            let new_project = response.data
+            const users = this.state.users.filter((item) => item.uid === new_project.users)[0]
+            new_project.users = users
+            this.setState({projects: [...this.state.projects, new_project]})
+            }).catch(error => console.log(error))
+    }
+
+    deleteNotice(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todo/${id}`, {headers})
+        .then(response => {
+        this.setState({notices: this.state.notices.filter((notice)=>notice.id !==
+        id)})
+        }).catch(error => console.log(error))
+    }
+
+    createNotice(creator,project, text) {
+        const headers = this.get_headers()
+        const data = {project: project, creator: creator, text: text}
+        axios.post(`http://127.0.0.1:8000/api/todo/`, data, {headers})
+            .then(response => {
+            let new_notice = response.data
+            const creator = this.state.users.filter((item) => item.uid === new_notice.creator)[0]
+            const project = this.state.projects.filter((item) => item.id === new_notice.project)[0]
+            new_notice.creator = creator
+            new_notice.project = project
+            this.setState({notices: [...this.state.notices, new_notice]})
+            }).catch(error => console.log(error))
+    }
     componentDidMount()  {
         this.get_token_from_storage()
 
         var now = new Date();
-
-//        const menu = [
-//                {
-//                    'name': 'Главная'
-//                },
-//                {
-//                    'name': 'Профиль'
-//                },
-//                {
-//                    'name': 'Инфо'
-//                }
-//            ]
 
         const footer =
             {
@@ -124,7 +157,6 @@ class App extends React.Component {
             }
         this.setState(
             {
-    //            'menu': menu,
                 'footer': footer
             }
         )
@@ -149,15 +181,29 @@ class App extends React.Component {
                                 </li>
 
                                 <li>
-                                    {this.is_authenticated() ? <button onClick={()=>this.logout()}>Выйти</button> : <Link to='/login'>Войти</Link>}
+                                    {this.is_authenticated() ? <button onClick={()=>
+                                    this.logout()}>Выйти</button> : <Link to='/login'>Войти</Link>}
                                 </li>
 
                             </ul>
                         </nav>
                         <Switch>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
-                        <Route exact path='/todo/' component={() => <NoticeList notices={this.state.notices}/>} />
-                        <Route exact path='/projects/' component={() => <ProjectList projects={this.state.projects}/>} />
+                        <Route exact path='/todo/' component={() =>
+                        <NoticeList notices={this.state.notices} deleteNotice={(id)=>this.deleteNotice(id)}/>} />
+
+                        <Route exact path='/todo/create' component={() => <NoticeForm users={this.state.users}
+                        projects={this.state.projects}
+                        createNotice={(project, creator, text) =>
+                        this.createNotice(project, creator, text)} />} />
+
+                        <Route exact path='/projects/create' component={() => <ProjectForm users={this.state.users}
+                        createProject={(users, project_name, project_repo) =>
+                        this.createProject(users, project_name, project_repo)} />} />
+
+                        <Route exact path='/projects/' component={() =>
+                        <ProjectList projects={this.state.projects} deleteProject={(id)=>this.deleteProject(id)}/>} />
+
                         <Route exact path='/login' component={() => <LoginForm get_token={(username, password) =>
                                                                         this.get_token(username, password)} />} />
                         <Route component={NotFound404} />
