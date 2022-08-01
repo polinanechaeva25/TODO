@@ -1,7 +1,8 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 
-const NoticeItem = ({notice}) => {
+const NoticeItem = ({notice, deleteNotice}) => {
     return (
         <tr>
             <td>
@@ -15,13 +16,15 @@ const NoticeItem = ({notice}) => {
             <td>
             {notice.created}
             </td>
+
+            <td><button onClick={()=>deleteNotice(notice.id)} type='button'>Delete</button></td>
         </tr>
     )
 }
 
-const NoticeList = ({notices}) => {
+const NoticeList = ({notices, deleteNotice}) => {
     return (
-
+            <div>
             <table>
 
                 <th>
@@ -37,8 +40,10 @@ const NoticeList = ({notices}) => {
                 </th>
 
 
-            {notices.map((notice) => <NoticeItem notice={notice} />)}
+            {notices.map((notice) => <NoticeItem notice={notice} deleteNotice={deleteNotice} />)}
             </table>
+                    <Link to='/todo/create'>Create</Link>
+            </div>
 
     )
 }
